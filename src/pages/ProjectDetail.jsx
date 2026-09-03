@@ -8,7 +8,7 @@ import CodeStudio from '../components/CodeStudio'
 import Button from '../components/ui/Button'
 import { Badge, Banner, Dot, EmptyState, LoadingScreen } from '../components/ui/Feedback'
 import { ConfirmDialog } from '../components/ui/Modal'
-import { ArrowLeft, FileText, Layers, Puzzle, Sparkles, Trash } from '../components/Icons'
+import { ArrowLeft, FileText, Layers, Puzzle, Sparkles, Target, Trash } from '../components/Icons'
 
 const TABS = [
   { id: 'analysis', label: 'Analysis', icon: Sparkles },
@@ -176,6 +176,7 @@ export default function ProjectDetail() {
       {tab === 'analysis' &&
         (project.analysis ? (
           <>
+            <TargetProduct settings={project.generation_settings} />
             <AnalysisPanel analysis={project.analysis} />
             {project.analysis_model && (
               <p className="text-center text-xs text-ink-600">
@@ -227,6 +228,60 @@ export default function ProjectDetail() {
         message="The VSL, its analysis and every generated asset will be permanently removed for the customer as well. This cannot be undone."
       />
     </div>
+  )
+}
+
+/** Read-only view of the customer's target product overrides. */
+function TargetProduct({ settings }) {
+  const fields = [
+    ['Product', settings?.product_name],
+    ['Type', settings?.product_type],
+    ['Price', settings?.price],
+    ['Payment', settings?.payment_note],
+    ['Language', settings?.language],
+    ['Market', settings?.country],
+    ['Guarantee', settings?.guarantee],
+    ['CTA', settings?.cta_label],
+  ].filter(([, value]) => Boolean(value))
+
+  if (!fields.length && !settings?.custom_instructions) return null
+
+  return (
+    <section className="card p-6">
+      <h3 className="flex items-center gap-2 text-sm font-semibold uppercase tracking-wider text-ink-300">
+        <Target className="h-4 w-4 text-accent-400" />
+        Target product overrides
+      </h3>
+      <p className="mt-1 text-sm text-ink-500">
+        Applied to both assets at generation time, replacing the offer described in the VSL.
+      </p>
+
+      {fields.length > 0 && (
+        <dl className="mt-4 grid gap-2.5 sm:grid-cols-2 lg:grid-cols-4">
+          {fields.map(([label, value]) => (
+            <div key={label} className="rounded-lg border border-ink-800 bg-ink-950/40 px-3 py-2">
+              <dt className="text-[11px] font-medium uppercase tracking-wider text-ink-500">
+                {label}
+              </dt>
+              <dd className="mt-0.5 truncate text-sm text-ink-100" title={value}>
+                {value}
+              </dd>
+            </div>
+          ))}
+        </dl>
+      )}
+
+      {settings?.custom_instructions && (
+        <div className="mt-3 rounded-lg border border-accent-500/25 bg-accent-500/5 p-3">
+          <p className="text-[11px] font-medium uppercase tracking-wider text-accent-400">
+            Custom instructions
+          </p>
+          <p className="mt-1 whitespace-pre-wrap text-sm text-ink-200">
+            {settings.custom_instructions}
+          </p>
+        </div>
+      )}
+    </section>
   )
 }
 

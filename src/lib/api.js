@@ -150,7 +150,7 @@ export async function getProjectDetail(projectId) {
   const { data, error } = await supabase
     .from('projects')
     .select(
-      `id, user_id, name, status, source_type, source_filename, vsl_text, analysis, analysis_model, analyzed_at, error_message, created_at, updated_at, ${OWNER_EMBED}`,
+      `id, user_id, name, status, source_type, source_filename, vsl_text, analysis, analysis_model, analyzed_at, error_message, generation_settings, created_at, updated_at, ${OWNER_EMBED}`,
     )
     .eq('id', projectId)
     .maybeSingle()

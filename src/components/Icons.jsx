@@ -256,6 +256,13 @@ export const Phone = (p) => (
   </Icon>
 )
 
+export const Tablet = (p) => (
+  <Icon {...p}>
+    <rect x="4" y="2.5" width="16" height="19" rx="2.5" />
+    <path d="M10.5 18.5h3" />
+  </Icon>
+)
+
 export const Quote = (p) => (
   <Icon {...p}>
     <path d="M9 7H5a2 2 0 0 0-2 2v3a2 2 0 0 0 2 2h2v1a3 3 0 0 1-3 3M19 7h-4a2 2 0 0 0-2 2v3a2 2 0 0 0 2 2h2v1a3 3 0 0 1-3 3" />
