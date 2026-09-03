@@ -1,0 +1,157 @@
+@import "tailwindcss";
+
+/* =====================================================================
+   Design tokens (Tailwind v4 theme layer)
+   ===================================================================== */
+@theme {
+  --color-ink-50: #f5f7ff;
+  --color-ink-100: #e7ebfa;
+  --color-ink-200: #c9d1ee;
+  --color-ink-300: #9aa6cf;
+  --color-ink-400: #6d7aa8;
+  --color-ink-500: #4a5580;
+  --color-ink-600: #333c62;
+  --color-ink-700: #232a48;
+  --color-ink-800: #161c33;
+  --color-ink-900: #0d1225;
+  --color-ink-950: #070a16;
+
+  --color-brand-50: #f0fdfa;
+  --color-brand-100: #ccfbf1;
+  --color-brand-200: #99f6e4;
+  --color-brand-300: #5eead4;
+  --color-brand-400: #2dd4bf;
+  --color-brand-500: #14b8a6;
+  --color-brand-600: #0d9488;
+  --color-brand-700: #0f766e;
+  --color-brand-800: #115e59;
+  --color-brand-900: #134e4a;
+
+  --color-accent-400: #38bdf8;
+  --color-accent-500: #0ea5e9;
+  --color-accent-600: #0284c7;
+
+  --font-sans: "Inter", ui-sans-serif, system-ui, -apple-system, "Segoe UI",
+    Roboto, Helvetica, Arial, sans-serif;
+  --font-mono: ui-monospace, "SFMono-Regular", "JetBrains Mono", Menlo,
+    Consolas, monospace;
+
+  --radius-xl: 0.875rem;
+  --radius-2xl: 1.125rem;
+
+  --animate-fade-up: fade-up 0.5s cubic-bezier(0.16, 1, 0.3, 1) both;
+  --animate-fade-in: fade-in 0.4s ease-out both;
+  --animate-float: float 7s ease-in-out infinite;
+}
+
+@keyframes fade-up {
+  from { opacity: 0; transform: translateY(14px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+@keyframes fade-in {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+@keyframes float {
+  0%, 100% { transform: translateY(0); }
+  50%      { transform: translateY(-18px); }
+}
+
+/* =====================================================================
+   Base
+   ===================================================================== */
+@layer base {
+  * {
+    border-color: color-mix(in oklab, var(--color-ink-700) 70%, transparent);
+  }
+
+  html {
+    scroll-behavior: smooth;
+    -webkit-text-size-adjust: 100%;
+  }
+
+  body {
+    background-color: var(--color-ink-950);
+    color: var(--color-ink-100);
+    font-family: var(--font-sans);
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+    min-height: 100vh;
+  }
+
+  ::selection {
+    background: color-mix(in oklab, var(--color-brand-500) 45%, transparent);
+    color: #fff;
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--color-brand-400);
+    outline-offset: 2px;
+  }
+
+  h1, h2, h3, h4 {
+    letter-spacing: -0.02em;
+    text-wrap: balance;
+  }
+
+  /* Scrollbars */
+  ::-webkit-scrollbar { width: 10px; height: 10px; }
+  ::-webkit-scrollbar-track { background: var(--color-ink-900); }
+  ::-webkit-scrollbar-thumb {
+    background: var(--color-ink-700);
+    border-radius: 9999px;
+    border: 2px solid var(--color-ink-900);
+  }
+  ::-webkit-scrollbar-thumb:hover { background: var(--color-ink-600); }
+}
+
+/* =====================================================================
+   Components
+   ===================================================================== */
+@layer components {
+  .container-page {
+    @apply mx-auto w-full max-w-7xl px-5 sm:px-8;
+  }
+
+  .card {
+    @apply rounded-2xl border border-ink-800 bg-ink-900/60 backdrop-blur-sm;
+  }
+
+  .card-hover {
+    @apply transition duration-200 hover:border-ink-600 hover:bg-ink-900;
+  }
+
+  .surface-grid {
+    background-image:
+      linear-gradient(to right, color-mix(in oklab, var(--color-ink-700) 40%, transparent) 1px, transparent 1px),
+      linear-gradient(to bottom, color-mix(in oklab, var(--color-ink-700) 40%, transparent) 1px, transparent 1px);
+    background-size: 56px 56px;
+  }
+
+  .text-gradient {
+    @apply bg-gradient-to-r from-brand-300 via-brand-200 to-accent-400 bg-clip-text text-transparent;
+  }
+
+  .glow {
+    box-shadow:
+      0 0 0 1px color-mix(in oklab, var(--color-brand-500) 25%, transparent),
+      0 18px 60px -18px color-mix(in oklab, var(--color-brand-500) 60%, transparent);
+  }
+
+  .link-muted {
+    @apply text-ink-300 transition-colors hover:text-white;
+  }
+
+  .prose-analysis h3 {
+    @apply mb-2 text-sm font-semibold uppercase tracking-wider text-ink-300;
+  }
+}
+
+@layer utilities {
+  .scrollbar-none {
+    scrollbar-width: none;
+  }
+  .scrollbar-none::-webkit-scrollbar {
+    display: none;
+  }
+}
