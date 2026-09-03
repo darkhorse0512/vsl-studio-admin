@@ -1,5 +1,6 @@
 import { Suspense, lazy, useEffect } from 'react'
 import { Route, Routes, useLocation } from 'react-router-dom'
+import { ThemeProvider } from './context/ThemeContext'
 import { AuthProvider } from './context/AuthContext'
 import { ToastProvider } from './context/ToastContext'
 import AdminRoute from './components/AdminRoute'
@@ -30,32 +31,34 @@ function ScrollToTop() {
 
 export default function App() {
   return (
-    <AuthProvider>
-      <ToastProvider>
-        <ConfigWarning />
-        <ScrollToTop />
+    <ThemeProvider>
+      <AuthProvider>
+        <ToastProvider>
+          <ConfigWarning />
+          <ScrollToTop />
 
-        <Suspense fallback={<LoadingScreen />}>
-          <Routes>
-            <Route path="/login" element={<Login />} />
-            <Route path="/reset-password" element={<ResetPassword />} />
+          <Suspense fallback={<LoadingScreen />}>
+            <Routes>
+              <Route path="/login" element={<Login />} />
+              <Route path="/reset-password" element={<ResetPassword />} />
 
-            {/* Everything below requires an approved administrator */}
-            <Route element={<AdminRoute />}>
-              <Route element={<AdminLayout />}>
-                <Route index element={<Overview />} />
-                <Route path="users" element={<Users />} />
-                <Route path="users/:id" element={<UserDetail />} />
-                <Route path="projects" element={<Projects />} />
-                <Route path="projects/:id" element={<ProjectDetail />} />
-                <Route path="audit" element={<AuditLog />} />
+              {/* Everything below requires an approved administrator */}
+              <Route element={<AdminRoute />}>
+                <Route element={<AdminLayout />}>
+                  <Route index element={<Overview />} />
+                  <Route path="users" element={<Users />} />
+                  <Route path="users/:id" element={<UserDetail />} />
+                  <Route path="projects" element={<Projects />} />
+                  <Route path="projects/:id" element={<ProjectDetail />} />
+                  <Route path="audit" element={<AuditLog />} />
+                </Route>
               </Route>
-            </Route>
 
-            <Route path="*" element={<NotFound />} />
-          </Routes>
-        </Suspense>
-      </ToastProvider>
-    </AuthProvider>
+              <Route path="*" element={<NotFound />} />
+            </Routes>
+          </Suspense>
+        </ToastProvider>
+      </AuthProvider>
+    </ThemeProvider>
   )
 }

@@ -3,6 +3,7 @@ import { Link, NavLink, Outlet, useLocation, useNavigate } from 'react-router-do
 import { useAuth } from '../context/AuthContext'
 import { supabase, APP_NAME, USER_APP_URL } from '../lib/supabase'
 import { cn, initials } from '../lib/utils'
+import ThemePicker from './ThemePicker'
 import Button from './ui/Button'
 import { Clock, ExternalLink, Grid, Layers, Logo, LogOut, Menu, Shield, User, X } from './Icons'
 
@@ -134,6 +135,13 @@ export default function AdminLayout() {
               Open user app
             </a>
           )}
+
+          <details className="rounded-xl border border-ink-800">
+            <summary className="cursor-pointer list-none px-3 py-2 text-sm text-ink-400 transition-colors hover:text-white">
+              Appearance
+            </summary>
+            <ThemePicker compact />
+          </details>
 
           <div className="flex items-center gap-3 rounded-xl px-2 py-2">
             <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-gradient-to-br from-brand-500 to-accent-500 text-xs font-bold text-white">

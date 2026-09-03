@@ -6,6 +6,7 @@ import { PROJECT_STATUS, cn, formatDateTime, timeAgo, wordCount } from '../lib/u
 import AnalysisPanel from '../components/AnalysisPanel'
 import CodeStudio from '../components/CodeStudio'
 import Button from '../components/ui/Button'
+import Select from '../components/ui/Select'
 import { Badge, Banner, Dot, EmptyState, LoadingScreen } from '../components/ui/Feedback'
 import { ConfirmDialog } from '../components/ui/Modal'
 import { ArrowLeft, FileText, Layers, Puzzle, Sparkles, Target, Trash } from '../components/Icons'
@@ -307,18 +308,17 @@ function AssetViewer({ type, assets, active, projectName, onSelect }) {
         </div>
 
         {assets.length > 1 && (
-          <select
+          <Select
             value={active?.id}
-            onChange={(event) => onSelect(event.target.value)}
-            aria-label="Select version"
-            className="h-9 rounded-lg border border-ink-700 bg-ink-950/60 px-3 text-sm text-ink-200 focus:border-brand-500 focus:outline-none"
-          >
-            {assets.map((asset) => (
-              <option key={asset.id} value={asset.id}>
-                Version {asset.version} — {timeAgo(asset.created_at)}
-              </option>
-            ))}
-          </select>
+            onChange={onSelect}
+            align="right"
+            className="w-56"
+            options={assets.map((asset) => ({
+              value: asset.id,
+              label: 'Version ' + asset.version,
+              description: timeAgo(asset.created_at),
+            }))}
+          />
         )}
       </div>
 
