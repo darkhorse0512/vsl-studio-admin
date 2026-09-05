@@ -127,6 +127,28 @@ export function openInNewTab(html) {
   return Boolean(tab)
 }
 
+/**
+ * Open a generated document in a new tab and trigger the print dialog, which
+ * is where the browser offers "Save as PDF". The preview iframe is sandboxed
+ * without same-origin access, so the parent cannot call print() on it - the
+ * print call is injected into the copy that gets opened instead.
+ */
+export function printDocument(html) {
+  const withPrint = html.includes('</body>')
+    ? html.replace(
+        '</body>',
+        '<script>window.addEventListener("load", function () { setTimeout(function () { window.print() }, 400) })</script></body>',
+      )
+    : html
+
+  const blob = new Blob([withPrint], { type: 'text/html;charset=utf-8' })
+  const url = URL.createObjectURL(blob)
+  const tab = window.open(url, '_blank', 'noopener,noreferrer')
+
+  setTimeout(() => URL.revokeObjectURL(url), 60_000)
+  return Boolean(tab)
+}
+
 export const PROJECT_STATUS = {
   draft: { label: 'Draft', tone: 'neutral', hint: 'Ready to analyse' },
   analyzing: { label: 'Analysing', tone: 'info', hint: 'The AI is reading your VSL' },
@@ -159,6 +181,8 @@ export const AUDIT_ACTION = {
   set_role: 'Changed role',
   set_notes: 'Updated notes',
   delete_user: 'Deleted account',
+  prompt_save: 'Edited a prompt',
+  prompt_reset: 'Restored a default prompt',
 }
 
 export function initials(name = '', fallback = '?') {

@@ -5,12 +5,25 @@ import { supabase, APP_NAME, USER_APP_URL } from '../lib/supabase'
 import { cn, initials } from '../lib/utils'
 import ThemePicker from './ThemePicker'
 import Button from './ui/Button'
-import { Clock, ExternalLink, Grid, Layers, Logo, LogOut, Menu, Shield, User, X } from './Icons'
+import {
+  Clock,
+  ExternalLink,
+  Grid,
+  Layers,
+  Logo,
+  LogOut,
+  Menu,
+  Shield,
+  Sparkles,
+  User,
+  X,
+} from './Icons'
 
 const NAV = [
   { to: '/', label: 'Overview', icon: Grid, end: true },
   { to: '/users', label: 'Users', icon: User, badge: 'pending' },
   { to: '/projects', label: 'Projects', icon: Layers },
+  { to: '/prompts', label: 'Prompts', icon: Sparkles },
   { to: '/audit', label: 'Audit log', icon: Clock },
 ]
 

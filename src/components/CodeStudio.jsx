@@ -1,5 +1,12 @@
 import { useEffect, useMemo, useState } from 'react'
-import { cn, copyText, downloadFile, openInNewTab, slugify } from '../lib/utils'
+import {
+  cn,
+  copyText,
+  downloadFile,
+  openInNewTab,
+  printDocument,
+  slugify,
+} from '../lib/utils'
 import { useToast } from '../context/ToastContext'
 import Button from './ui/Button'
 import {
@@ -11,6 +18,7 @@ import {
   Eye,
   Monitor,
   Phone,
+  Printer,
   Refresh,
   Tablet,
   X,
@@ -29,15 +37,28 @@ const DEVICES = {
  * `allow-same-origin`, so generated JavaScript stays interactive while being
  * unable to reach this app's session, cookies or storage.
  */
-export default function CodeStudio({ code, title, downloadName = 'asset', meta = null }) {
-  const [tab, setTab] = useState('preview')
+export default function CodeStudio({
+  code,
+  title,
+  downloadName = 'asset',
+  meta = null,
+  /** 'html' renders a live preview; 'markdown' is text only. */
+  kind = 'html',
+  /** Adds a print / save-as-PDF action (used by the product deliverable). */
+  printable = false,
+}) {
+  const isMarkdown = kind === 'markdown'
+  const [tab, setTab] = useState(kind === 'markdown' ? 'code' : 'preview')
   const [device, setDevice] = useState('desktop')
   const [reloadKey, setReloadKey] = useState(0)
   const [copied, setCopied] = useState(false)
   const [fullscreen, setFullscreen] = useState(false)
   const toast = useToast()
 
-  const filename = useMemo(() => `${slugify(downloadName)}.html`, [downloadName])
+  const filename = useMemo(
+    () => `${slugify(downloadName)}.${isMarkdown ? 'md' : 'html'}`,
+    [downloadName, isMarkdown],
+  )
   const sizeKb = useMemo(() => (new Blob([code ?? '']).size / 1024).toFixed(1), [code])
   const lines = useMemo(() => (code ? code.split('\n') : []), [code])
 
@@ -70,8 +91,14 @@ export default function CodeStudio({ code, title, downloadName = 'asset', meta =
   }
 
   const handleDownload = () => {
-    downloadFile(filename, code)
+    downloadFile(filename, code, isMarkdown ? 'text/markdown;charset=utf-8' : undefined)
     toast.success(`Downloaded ${filename}`)
+  }
+
+  const handlePrint = () => {
+    if (!printDocument(code)) {
+      toast.error('Your browser blocked the pop-up. Allow pop-ups for this site and try again.')
+    }
   }
 
   const handleOpen = () => {
@@ -91,16 +118,25 @@ export default function CodeStudio({ code, title, downloadName = 'asset', meta =
     >
       {/* Toolbar ------------------------------------------------------ */}
       <div className="flex flex-wrap items-center gap-2 border-b border-ink-800 bg-ink-900/70 px-3 py-2.5 sm:px-4">
-        <Segmented
-          options={[
-            { value: 'preview', label: 'Preview', icon: Eye },
-            { value: 'code', label: 'Code', icon: Code },
-          ]}
-          value={tab}
-          onChange={setTab}
-        />
+        {!isMarkdown && (
+          <Segmented
+            options={[
+              { value: 'preview', label: 'Preview', icon: Eye },
+              { value: 'code', label: 'Code', icon: Code },
+            ]}
+            value={tab}
+            onChange={setTab}
+          />
+        )}
 
-        {tab === 'preview' && (
+        {isMarkdown && (
+          <span className="inline-flex items-center gap-1.5 rounded-lg border border-ink-800 px-3 py-1.5 text-sm text-ink-300">
+            <Code className="h-4 w-4" />
+            Markdown
+          </span>
+        )}
+
+        {tab === 'preview' && !isMarkdown && (
           <div className="hidden sm:block">
             <Segmented
               iconOnly
@@ -124,6 +160,12 @@ export default function CodeStudio({ code, title, downloadName = 'asset', meta =
             />
           )}
           <IconAction label="Open in a new tab" icon={ExternalLink} onClick={handleOpen} />
+          {printable && (
+            <Button variant="secondary" size="sm" onClick={handlePrint}>
+              <Printer className="h-4 w-4" />
+              <span className="hidden sm:inline">PDF</span>
+            </Button>
+          )}
           <IconAction
             label={fullscreen ? 'Exit full screen' : 'Full screen'}
             icon={fullscreen ? X : ExpandIcon}
@@ -144,7 +186,7 @@ export default function CodeStudio({ code, title, downloadName = 'asset', meta =
       </div>
 
       {/* Body --------------------------------------------------------- */}
-      {tab === 'preview' ? (
+      {tab === 'preview' && !isMarkdown ? (
         <div
           className={cn(
             'flex-1 overflow-auto bg-gradient-to-b from-ink-950 to-ink-900/60 p-3 sm:p-5',

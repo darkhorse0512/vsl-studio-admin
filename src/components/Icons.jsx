@@ -263,6 +263,27 @@ export const Tablet = (p) => (
   </Icon>
 )
 
+export const Printer = (p) => (
+  <Icon {...p}>
+    <path d="M7 8V3h10v5M7 17H5a2 2 0 0 1-2-2v-4a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v4a2 2 0 0 1-2 2h-2" />
+    <rect x="7" y="14" width="10" height="7" rx="1.5" />
+  </Icon>
+)
+
+export const Book = (p) => (
+  <Icon {...p}>
+    <path d="M4 5.5A2.5 2.5 0 0 1 6.5 3H19v15H6.5A2.5 2.5 0 0 0 4 20.5z" />
+    <path d="M4 20.5A2.5 2.5 0 0 1 6.5 18H19v3H6.5A2.5 2.5 0 0 1 4 20.5z" />
+  </Icon>
+)
+
+export const Megaphone = (p) => (
+  <Icon {...p}>
+    <path d="M3 11v2a1 1 0 0 0 1 1h3l7 4V6L7 10H4a1 1 0 0 0-1 1z" />
+    <path d="M18 9a3 3 0 0 1 0 6M7 14v5a1 1 0 0 0 1 1h1.5a1 1 0 0 0 1-1.2L10 14" />
+  </Icon>
+)
+
 export const Quote = (p) => (
   <Icon {...p}>
     <path d="M9 7H5a2 2 0 0 0-2 2v3a2 2 0 0 0 2 2h2v1a3 3 0 0 1-3 3M19 7h-4a2 2 0 0 0-2 2v3a2 2 0 0 0 2 2h2v1a3 3 0 0 1-3 3" />

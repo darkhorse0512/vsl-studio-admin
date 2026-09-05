@@ -17,6 +17,7 @@ const Users = lazy(() => import('./pages/Users'))
 const UserDetail = lazy(() => import('./pages/UserDetail'))
 const Projects = lazy(() => import('./pages/Projects'))
 const ProjectDetail = lazy(() => import('./pages/ProjectDetail'))
+const Prompts = lazy(() => import('./pages/Prompts'))
 const AuditLog = lazy(() => import('./pages/AuditLog'))
 
 function ScrollToTop() {
@@ -50,6 +51,7 @@ export default function App() {
                   <Route path="users/:id" element={<UserDetail />} />
                   <Route path="projects" element={<Projects />} />
                   <Route path="projects/:id" element={<ProjectDetail />} />
+                  <Route path="prompts" element={<Prompts />} />
                   <Route path="audit" element={<AuditLog />} />
                 </Route>
               </Route>

@@ -189,3 +189,23 @@ export async function listAuditLogs(limit = 100) {
   if (error) throw new Error(error.message)
   return data ?? []
 }
+
+/* ------------------------------------------------------------------ */
+/* Prompts                                                             */
+/*                                                                     */
+/* The code ships a default for every generator; the database holds    */
+/* only overrides. The function returns both so the editor can show    */
+/* what shipped, what changed, and restore it.                         */
+/* ------------------------------------------------------------------ */
+
+export function listPrompts() {
+  return callFunction('admin-prompts', { action: 'list' })
+}
+
+export function savePrompt(payload) {
+  return callFunction('admin-prompts', { action: 'save', ...payload })
+}
+
+export function resetPrompt(id) {
+  return callFunction('admin-prompts', { action: 'reset', id })
+}
